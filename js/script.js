@@ -7,7 +7,7 @@ function cardDisplay(card) {
     for (let i = 0; i < card.abilities.length; i++) {
       abilities += `<li>${
         card.abilities[i].description
-      }(costo: ${card.abilities[i].cost.join(", ")})`;
+      }(costo: ${card.abilities[i].cost.join(", ")})</li>`;
     }
     abilities += "</ul>";
   }
