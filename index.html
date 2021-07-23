@@ -5,10 +5,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
     <title>Document</title>
 </head>
 
 <body>
+    <div id="research">
+        <select id="filter">
+            <option value="all" selected>Tutte</option>
+            <option value="id">ID</option>
+            <option value="name">Nome</option>
+            <option value="launchCost">Costo di lancio</option>
+            <option value="cardType">Tipo di carta</option>
+            <option value="subType">Sottotipo di carta</option>
+            <option value="strenght">Forza</option>
+            <option value="constitution">Costituzione</option>
+            <option value="border">Bordo</option>
+        </select>
+        <input type="search" id="keyword" placeholder="Scrivi..." class="hidden">
+        <button id="search">Filtra</button>
+    </div>
+    <hr>
+
     <div id="cards"></div>
 
     <script src="./js/objects.js"></script>

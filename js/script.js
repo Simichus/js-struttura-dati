@@ -1,45 +1,92 @@
-function cardDisplay(card) {
-  let subType = card.subType ? " - " + card.subType : "";
+const cards = document.getElementById("cards");
 
-  let abilities = "<em>Nessuna abilità</em>";
-  if (card.abilities.length > 0) {
-    abilities = "<ul>";
-    for (let i = 0; i < card.abilities.length; i++) {
-      abilities += `<li>${
-        card.abilities[i].description
-      }(costo: ${card.abilities[i].cost.join(", ")})</li>`;
+function deckDisplay(deck) {
+  cards.innerHTML = "";
+
+  for (let i = 0; i < deck.length; i++) {
+    let subType = deck[i].subType ? " - " + deck[i].subType : "";
+
+    let abilities = "<em>Nessuna abilità</em>";
+    if (deck[i].abilities.length > 0) {
+      abilities = "<ul>";
+      for (let j = 0; j < deck[i].abilities.length; j++) {
+        abilities += `<li>${deck[i].abilities[j].description}(costo: ${deck[
+          i
+        ].abilities[j].cost.join(", ")})</li>`;
+      }
+      abilities += "</ul>";
     }
-    abilities += "</ul>";
-  }
 
-  const author = card.flavorText.author ? " - " + card.flavorText.author : "";
+    const author = deck[i].flavorText.author
+      ? " - " + deck[i].flavorText.author
+      : "";
 
-  let displayMessage = `
+    let displayMessage = `
   <ul>
-  <li><strong>Nome</strong>: ${card.name}</li>
-  <li><strong>Costo Evocazione</strong>: ${card.launchCost.join("")}</li>
-  <li><strong>Tipo Carta</strong>: ${card.cardType}${subType}</li>
+  <li><strong>Nome</strong>: ${deck[i].name}</li>
+  <li><strong>Costo Evocazione</strong>: ${deck[i].launchCost.join("")}</li>
+  <li><strong>Tipo Carta</strong>: ${deck[i].cardType}${subType}</li>
   <li><strong>Espansione</strong>:
     <ul>
-    <li><strong>Nome</strong>: ${card.expansion.name}</li>
-    <li><strong>Simbolo</strong>: ${card.expansion.symbol}</li>
+    <li><strong>Nome</strong>: ${deck[i].expansion.name}</li>
+    <li><strong>Simbolo</strong>: ${deck[i].expansion.symbol}</li>
     </ul>
   </li>
   <li><strong>Abilità</strong>: ${abilities}</li>
   <li><strong>Testo di colore</strong>: ${
-    card.flavorText.description
+    deck[i].flavorText.description
   }${author}</li>
-  <li><strong>Immagine</strong>: ${card.illustration.source}</li>
-  <li><strong>Autore</strong>: ${card.illustration.illustrator}</li>
-  <li><strong>Valori carta</strong>: ${card.strenght}/${card.constitution}</li>
-  <li><strong>Numero carta</strong>: ${card.expansion.numberOfThisCard}/${
-    card.expansion.numberOfCards
-  }</li>
+  <li><strong>Immagine</strong>: ${deck[i].illustration.source}</li>
+  <li><strong>Autore</strong>: ${deck[i].illustration.illustrator}</li>
+  <li><strong>Valori carta</strong>: ${deck[i].strenght}/${
+      deck[i].constitution
+    }</li>
+  <li><strong>Numero carta</strong>: ${deck[i].expansion.numberOfThisCard}/${
+      deck[i].expansion.numberOfCards
+    }</li>
   </ul>
   `;
-  return displayMessage;
+    cards.innerHTML += displayMessage + "<hr>";
+  }
 }
 
-const cards = document.getElementById("cards");
+deckDisplay(deck);
 
-cards.innerHTML = cardDisplay(card);
+// FILTER
+const filterField = document.getElementById("filter");
+const keywordField = document.getElementById("keyword");
+const searchButton = document.getElementById("search");
+
+filterField.addEventListener("change", () => {
+  if (filterField.value !== "all") {
+    keywordField.classList.remove("hidden");
+  } else {
+    keywordField.classList.add("hidden");
+  }
+});
+
+searchButton.addEventListener("click", () => {
+  if (filterField.value !== "all") {
+    const currentDeck = [];
+    for (let i = 0; i < deck.length; i++) {
+      const currentCard = deck[i];
+
+      switch (filterField.value) {
+        case "id":
+        case "strenght":
+        case "constitution":
+          if (currentCard[filterField.value] == keywordField.value) {
+            currentDeck.push(currentCard);
+          }
+          break;
+        default:
+          if (currentCard[filterField.value].includes(keywordField.value)) {
+            currentDeck.push(currentCard);
+          }
+      }
+    }
+    deckDisplay(currentDeck);
+  } else {
+    deckDisplay(deck);
+  }
+});
